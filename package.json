@@ -23,7 +23,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "docker:start": "docker-compose up -d"
+    "docker:start": "docker-compose up -d",
+    "docker:stop": "docker-compose down",
+    "docker:build": "docker-compose build"
   },
   "dependencies": {
     "@mikro-orm/cli": "^4.5.9",
