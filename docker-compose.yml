@@ -1,18 +1,25 @@
-version: '3.7'
+version: '3.8'
 
 services:
   app:
+    container_name: user-app-api
+    image: nestjs-api-dev:1.0.0
     build:
       context: .
-    container_name: user-app
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
     depends_on:
       - postgres
     ports:
-      - '3001:3001'
-    volumes:
-      - .:/app
+      - 3000:3000
+      - 9229:9229
     networks:
-      - user-app-api
+      - nesjs-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
 
   postgres:
     image: kartoza/postgis:latest
@@ -21,7 +28,7 @@ services:
     ports:
       - ${DB_HOST_PORT}:5432
     networks:
-      - user-app-api
+      - nesjs-network
     expose:
       - 5432
     env_file:
@@ -31,12 +38,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: user_app
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    # networks:
-    #   - local-user-app
+      - .:/usr/postgresql/data
 
 networks:
-  user-app-api:
-
-volumes:
-  postgres-data:
+  nesjs-network:

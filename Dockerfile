@@ -1,13 +1,29 @@
-FROM node:14-alpine
+# FROM node:14-alpine
 
-WORKDIR /app
+# WORKDIR /app
+
+# COPY package*.json ./
+
+# RUN npm install glob rimraf
+
+# RUN npm install 
+
+# ADD ./ /app
+
+# EXPOSE 3000
+
+# RUN npm run build
+
+FROM node:10
+
+WORKDIR /usr/src/app
 
 COPY package*.json ./
 
-RUN npm install 
+RUN npm install glob rimraf
 
-ADD ./ /app
+RUN npm install --only=development
 
-EXPOSE 3001
+COPY . .
 
-# CMD ["npm", "run", "start:dev"];
+RUN npm run build
