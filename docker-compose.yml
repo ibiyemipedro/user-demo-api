@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  app:
+    build:
+      context: .
+    container_name: user-app
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/user_app
+      NODE_ENV: development
+      PORT: 3001
+    ports:
+      - '3001:3001'
+    networks:
+      - user-app-api
+
+  #   volumes:
+  #     - .:/app/
+  #     - /app/node_modules
+  #   - local-user-app
+
+  postgres:
+    image: kartoza/postgis:latest
+    container_name: user-app-db
+    restart: unless-stopped
+    ports:
+      - ${DB_HOST_PORT}:5432
+    networks:
+      - user-app-api
+    expose:
+      - 5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: user_app
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    # networks:
+    #   - local-user-app
+
+networks:
+  user-app-api:
+
+volumes:
+  postgres-data:
